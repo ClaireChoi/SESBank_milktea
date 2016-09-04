@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--DB접속 정보를 가지고 있는 파일설정 -->
+	<properties resource="db.properties"></properties>
+	<typeAliases> <!--알리아스는 별칭 User가 들어있는 패키지 이름 지정 -->
+	<!-- 알리아스는 userMapper 의파라메터와 같아야 -->
+		<typeAlias alias="Customer" type="vo.Customer" />
+		<typeAlias alias="Account" type="vo.Account" />
+		<typeAlias alias="AccountLog" type="vo.AccountLog" />
+		<typeAlias alias="Board" type="vo.Board" />
+	</typeAliases>
+	
+	<!-- DB접속 정보 세팅 -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="CustomerMapper.xml" />
+		<mapper resource="AccountMapper.xml"/>
+		<mapper resource="AccountLogMapper.xml"/>
+		<mapper resource="boardMapper.xml"/>
+	</mappers>
+
+	
+</configuration>
+
+
+
+

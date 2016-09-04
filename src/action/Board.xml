@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+   "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+
+	<package name="board" namespace="/board" extends="default">
+		<!-- namespace는 가상경로 경로가 꼬일 수 있으니 경로 설정을 잘 해야함. 실제 경로는 액션 사이에 있는 것. 가상경로는 
+			url에 포함 -->
+		<!-- redirect는 주소표시줄에 어떻게 표현될까 예상해서 가상경로로 호출해야함. dispatcher는 실제경로 서버의 자기디렉토리 
+			안에있는 경로로 호출해야 함 -->
+		<action name="boardlist" class="action.BoardAction" method="boardlist">
+			<result>/board/list.jsp</result>
+		</action>
+		<!-- 글쓰기 게시판 -->
+		<action name="board_write" class="action.BoardAction" method="boardWrite">
+			<result>/board/write.jsp</result>
+		</action>
+		
+		<!-- 글 저장 -->
+		<action name="writeAction" class="action.BoardAction" method="writeAction">
+			<result name="success" type="redirect">/board/boardlist.action</result>
+			<result name="input">/board/write.jsp</result>
+		</action>
+		<!-- 글 읽기 -->
+		<action name="boardRead" class="action.BoardAction" method="boardRead">
+			<result>/board/view.jsp</result>
+		</action>
+		<action name="answerview" class="action.BoardAction" method="boardRead">
+		<result>/adm/answerview.jsp</result>
+		</action>
+		<!-- 글 검색 -->
+		<action name="searchText" class="action.BoardAction" method="searchText">
+			<result>/board/list.jsp</result>
+		</action>
+		<!-- 사용자 글 삭제 -->
+		<action name="deleteBoardCu" class="action.BoardAction" method="deleteBoard">
+		<result>/board/list.jsp</result>
+		</action>
+		<!-- 파일 다운로드 -->
+		<action name="fileDownload" class="action.FileDownloadAction"  >
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="contentLength">${contentLenth}</param>
+				<param name="contentDisposition">${contentDisposition}</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<!-- %는 밸류스택에 있는 거 쓰는 것. ${}는 어딘가에 이 변수로 저장된 값이 있다는 것. -->
+		<!-- 관리자가 답변달기 -->
+		<action name="replyAction" class="action.BoardAction" method="reply">
+			<result>/adm/answerview.jsp</result>
+		</action>
+		
+		<!-- 관리자가 파일삭제-->
+		<action name="deleteBoard" class="action.BoardAction" method="deleteBoard">
+		<result>/adm/answerlist.jsp</result>
+		</action>
+		
+		<!-- 관리자 글수정 페이지로  -->
+		<action name="updateBoard" class="action.BoardAction" method="updateBoard">
+		<result>/board/write.jsp</result>
+		</action>
+		
+		<!-- 글수정 액션 -->
+		<action name="updateAction" class="action.BoardAction" method="updateAction">
+		<result>/adm/answerlist.jsp</result>
+		</action>
+	</package>
+
+</struts>

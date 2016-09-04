@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Account">
+	<!-- ser.java의 멤버변수와 이름이 같아야 한다. -->
+<!-- 	<insert id="" parameterType="Customer"> -->
+<!-- 	SELECT * FROM CUSTOMER WHERE CUSTID = #{custid} -->
+<!-- 	</insert> -->
+	<insert id="insertAccount" parameterType="Account" >
+		INSERT INTO ACCOUNT
+		<if test="accounttype=='checking'"> 
+		(ACCOUNTNO, CUSTID, ACCOUNTTYPE, BALANCE)
+		VALUES(#{accountno}, #{custid}, #{accounttype},#{balance})
+		</if>
+		<if  test="accounttype!='checking'">
+		VALUES(#{accountno}, #{custid}, #{accounttype},#{balance},#{payment},#{interest}, sysdate, ADD_MONTHS(sysdate,(#{enddeposit}*12)),#{approval})
+		</if>	
+	</insert>
+	
+	<select id="listAccount"  parameterType="Map" resultType="Account">
+		SELECT ACCOUNTNO, CUSTID, ACCOUNTTYPE, BALANCE, PAYMENT, INTEREST, TO_CHAR(STARTDEPOSIT,'YYYY-MM-DD') AS STARTDEPOSIT
+		, TO_CHAR(ENDDEPOSIT,'YYYY-MM-DD') AS ENDDEPOSIT, APPROVAL
+		 FROM ACCOUNT
+		 <if test="custid!='admin'">
+		 WHERE CUSTID =#{custid}
+		</if>
+		<if test="custid=='admin'">
+		WHERE ACCOUNTTYPE = 'loan'
+		</if>
+	</select>
+	
+	<select id="searchAccount" parameterType="String" resultType="Account">
+		SELECT * FROM ACCOUNT
+		WHERE ACCOUNTNO=#{accountno}
+	</select>
+
+	<update id="depositAccount" parameterType="Map">
+		UPDATE ACCOUNT
+		SET BALANCE = BALANCE+ #{amount}
+		WHERE ACCOUNTNO = #{accountno}
+	</update>
+	
+	<select id="checkBalance" parameterType="Map" resultType="Integer">
+		SELECT BALANCE
+		FROM ACCOUNT
+		WHERE ACCOUNTNO = #{accountno}
+	</select>
+	<update id="withdrawAccount" parameterType="Map">
+		UPDATE ACCOUNT
+		SET BALANCE = BALANCE - #{amount}
+		WHERE ACCOUNTNO = #{accountno}
+	</update>
+	<update id="loan_allow" parameterType="Map">
+		UPDATE ACCOUNT
+		SET APPROVAL = 'Y'
+		WHERE ACCOUNTNO = #{accno}
+	</update>
+</mapper>

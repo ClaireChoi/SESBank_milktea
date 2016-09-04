@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+
+    <constant name="struts.devMode" value="true" />
+		<include file="action/Account.xml" /> 
+		<include file="action/Customer.xml" /> 
+		<include file="action/Board.xml" /> 
+    <package name="default" namespace="/" extends="struts-default">
+
+	<!-- 사용자 인터셉터 등록 -->
+	<interceptors>
+			<interceptor name="loginInterceptor" class="seschool.bank.intercepter.LoginInterceptor"/>
+			<interceptor name="adminInterceptor" class="seschool.bank.intercepter.AdminInterceptor"/>
+			
+			<interceptor-stack name="loginStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="loginInterceptor"></interceptor-ref>
+			</interceptor-stack>
+			
+			<interceptor-stack name="adminStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="loginInterceptor"></interceptor-ref>
+				<interceptor-ref name="adminInterceptor"></interceptor-ref>
+			</interceptor-stack>
+			
+		</interceptors>
+		<default-action-ref name="index" />
+		
+		<global-results>
+			<result  name="login" type="redirect"> /login.action </result>
+			<result  name="admin" type="redirect"> /login.action </result>
+		
+		</global-results>
+
+
+	
+		
+		<action name="index">
+		<result >/login.jsp</result>
+		</action>
+		
+		
+		<!-- mapper\ * .xml, action\ *.xml :Customer.xml-->
+	
+    </package>
+
+    <!-- Add packages here -->
+
+</struts>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Customer">
+	<!-- ser.java의 멤버변수와 이름이 같아야 한다. -->
+<!-- 	<insert id="" parameterType="Customer"> -->
+<!-- 	SELECT * FROM CUSTOMER WHERE CUSTID = #{custid} -->
+<!-- 	</insert> -->
+	<insert id="insertCustomer" parameterType="Customer">
+		INSERT INTO CUSTOMER VALUES(#{custid}, #{password}, #{email},#{division},#{name},#{idno},#{address})
+	</insert>
+	<select id="selectCustomer" parameterType="Customer" resultType="Customer">
+		SELECT * FROM CUSTOMER WHERE CUSTID =#{custid}
+	</select>
+	
+	<select id="findCustomer" parameterType="Customer" resultType="Customer">
+		SELECT * FROM CUSTOMER 
+		WHERE NAME=#{name} AND EMAIL=#{email}
+	</select>
+
+	<update id="updateCustomer" parameterType="Customer">
+		UPDATE CUSTOMER
+		SET EMAIL = #{email}, DIVISION = #{division}, NAME=#{name}, ADDRESS=#{address}
+		<if test="password != null">
+			, PASSWORD =#{password} 
+		</if>
+		WHERE CUSTID = #{custid}
+	</update>
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+   "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true" />
+
+    <package name="customer" namespace="/customer" extends="default">
+    <!-- namespace는 가상경로 경로가 꼬일 수 있으니 경로 설정을 잘 해야함. 실제 경로는 액션 사이에 있는 것. 가상경로는 url에 포함 -->
+	<!-- redirect는 주소표시줄에 어떻게 표현될까 예상해서 가상경로로 호출해야함. dispatcher는 실제경로 서버의 자기디렉토리 안에있는 경로로 호출해야 함 -->
+   
+   <!-- 로그인 & 로그아웃-->
+     <action name="login" class="action.CustomerAction" method="login">
+     <result name="success">/customer/haveaccount.jsp</result>
+     <result name="admin">/adm/loan.jsp</result>
+     <result name="error">/login.jsp</result>
+   </action>
+  
+   <action name="logout" class="action.CustomerAction" method="logout">
+     <result>/login.jsp</result>
+   </action>
+   
+   <!-- 보유계좌 현황 -->
+   <action name="haveaccount" class="action.AccountAction" method="showAccList" >
+   <interceptor-ref name="loginStack"/>
+     <result>/customer/haveaccount.jsp</result>
+   </action>
+   
+   <!-- 회원가입 -->
+   <action name="join" >
+     <result>/join/join.jsp</result>
+   </action>
+   
+   <action name="joinAction" class="action.CustomerAction" method="insertCustomer" >
+     <result>/login.jsp</result>
+   </action>
+   
+   <action name="idCheck" class="action.CustomerAction" method="idCheck"  > <!-- id -->
+     <result name="success">/join/join_pop.jsp</result>
+   </action>
+   <action name="idChecked" class="action.CustomerAction" method="idCheck"  > <!-- id -->
+     <result name="success">/join/join_pop.jsp</result>
+   </action>
+   
+   <!-- ID&PW 찾기 -->
+   <action name="find_idpw" >
+     <result>/customer/find_idpw.jsp</result>
+   </action>
+   
+    <action name="find_idpw" >
+   <result>/customer/find_idpw.jsp</result>
+   </action>
+   <action name="findIdAction"  class="action.CustomerAction" method="findId">
+   <result>/customer/find_idpw.jsp</result>
+   </action>
+
+	<!-- 회원정보 수정 -->
+  <action name="update" class="action.CustomerAction" method="selectCustomer">
+  <interceptor-ref name="loginStack"></interceptor-ref>
+  <result>/customer/info.jsp</result>
+  </action>
+  <action name="updateAction" class="action.CustomerAction" method="updateCustomer">
+  <result>/customer/deposit.jsp</result>
+  </action>
+
+    </package>
+
+</struts>

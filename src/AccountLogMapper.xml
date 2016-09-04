@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AccountLog">
+	<!-- ser.java의 멤버변수와 이름이 같아야 한다. -->
+<!-- 	<insert id="" parameterType="Customer"> -->
+<!-- 	SELECT * FROM CUSTOMER WHERE CUSTID = #{custid} -->
+<!-- 	</insert> -->
+	<insert id="insertAccountLog" parameterType="AccountLog" >
+		INSERT INTO ACCOUNTLOG VALUES(ACCOUNTLOG_SEQ.NEXTVAL,#{custid},#{accountno},#{transferno},sysdate,#{eventtype},
+		#{eventrecord},#{amount},#{balance})
+
+	</insert>
+	<select id="searchAccountLog" parameterType="Map" resultType="AccountLog">
+	SELECT * FROM ACCOUNTLOG 
+	WHERE ACCOUNTNO = #{accountno} 
+	<if test="eventtype!='all'">
+	AND EVENTTYPE= #{eventtype}
+	</if>
+	AND (EVENTDATE BETWEEN TO_DATE(#{startdate},'YYYY-MM-DD') AND TO_DATE(#{enddate},'YYYY-MM-DD'))
+	ORDER BY EVENTDATE <if test="order=='asc'"> ASC</if><if test="order=='desc'"> DESC</if> 
+	
+	</select>
+
+</mapper>
+
+<!--id는 필수 요소 나머지는 선택요소. 하지만 select에서는 resultType 필수. Integer vo 타입으로 받을 
+	때는 변수명을 통일해야하지만 String하나 넘길 때는 달라도 됨. 어차피 하나니까. resultType은 반환타입 -->

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 고객 문의 게시판 관련 쿼리 -->
+<mapper namespace="boardMapper">
+
+<!-- 문의글 쓰기 -->
+<insert id="insertBoard" parameterType="Board">
+insert 
+into 
+	QNABOARD
+( BOARDNO, CUSTID, TITLE, CONTENT
+	<if test="originalfile != null and savedfile != null">
+	, originalfile, savedfile
+	</if>
+)
+values 
+(
+	QNABOARD_SEQ.nextval, #{custid}, #{title}, #{content}
+	<if test="originalfile != null and savedfile != null">
+	, #{originalfile}, #{savedfile}
+	</if>
+)
+</insert>
+
+<!-- 답변글 쓰기 -->
+<update id="replyBoard" parameterType="Board">
+	update qnaboard
+	set replytext = #{replytext}, repdate = sysdate
+	where boardno = #{boardno}
+</update>
+
+
+<!-- 게시판 전체 글 개수 -->
+<select id="getTotal" parameterType="hashmap" resultType="int">
+select 
+	count(*)
+from 
+	qnaboard 
+<if test="searchText != null and searchField != null">
+where 
+	<if test="searchField == 'title'">
+	title like '%' || #{searchText} || '%'
+	</if>
+	<if test="searchField == 'content'">
+	content like '%' || #{searchText} || '%'
+	</if>
+</if>
+</select>
+
+<!-- 게시판 목록 -->
+<!-- <select id="listBoard" parameterType="hashmap" resultType="Board"/> -->
+<!-- select -->
+<!-- 	boardno, custid, title, to_char(redate, 'YYYY-MM-DD') redate, hitcount, (DECODE(replytext, null, '예정','완료')) notify -->
+<!-- 	from anaboard -->
+<!-- 	<if test="searchText != null and searchField != null"> -->
+<!-- 	where -->
+<!-- 		<if test="searchField == 'title'"> -->
+<!-- 		title like '%' || #{searchText} ||'%' -->
+<!-- 		</if> -->
+<!-- 	</if> -->
+	
+	
+<select id="listBoard" parameterType="hashmap" resultType="Board">
+select 
+	boardno
+	, custid
+	, title
+	, to_char(regdate, 'YYYY-MM-DD') regdate
+	, hitcount
+	, (DECODE(replytext, null, '예정', '완료')) notify
+from 
+	qnaboard 
+<if test="searchText != null and searchField != null">
+where 
+	<if test="searchField == 'title'">
+	title like '%' || #{searchText} || '%'
+	</if>
+	<if test="searchField == 'content'">
+	content like '%' || #{searchText} || '%'
+	</if>
+</if>
+order by boardno desc
+</select>
+
+
+<!-- 게시판 글 읽기 -->
+<select id="getBoard" parameterType="int" resultType="Board">
+	select 
+		boardno
+		, custid
+		, title
+		, content
+		, to_char(regdate, 'YYYY-MM-DD HH24:MI:SS') regdate
+		, hitcount
+		, originalfile
+		, savedfile
+		, replytext
+		, to_char(repdate, 'YYYY-MM-DD HH24:MI:SS') repdate
+		, (DECODE(replytext, null, '예정', '완료')) notify
+	from 
+		qnaboard 
+	where 
+		boardno = #{boardno}
+</select>
+
+<!-- 게시판 글 조회수 증가 -->
+<update id="hitcount" parameterType="int">
+	update
+		qnaboard
+	set 
+		hitcount = hitcount + 1
+	where 
+		boardno = #{boardno}
+</update>
+
+<!-- 게시판 글 삭제 -->
+<delete id="deleteBoard" parameterType="int">
+	delete
+	from
+		qnaboard
+	where 
+		boardno = #{boardno}
+</delete>
+
+<!-- 게시판 글 수정 -->
+<update id="updateBoard" parameterType="Board">
+	update
+		qnaboard
+	set 
+		title = #{title}
+		, content = #{content}
+		, repdate = sysdate
+		<if test="replytext!=null">
+		, replytext = #{replytext}
+		</if>
+	where 
+		boardno = #{boardno}
+</update>
+
+<!-- 게시판 글에 관리자가 답변 달기 -->
+<update id="insertReply" parameterType="Board">
+	update
+		qnaboard
+	set 
+		replytext = #{replytext}
+		, repdate = sysdate
+	where 
+		boardno = #{boardno}
+</update>
+
+</mapper>

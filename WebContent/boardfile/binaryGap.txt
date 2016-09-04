@@ -1,0 +1,15 @@
+def solution(N):
+	flag=False
+	Nbin = bin(N)
+	if Nbin[len(Nbin)-1]=='0':
+		flag = True
+	zeros = Nbin.split('1')[1:]
+	if flag == True:
+		zeros.remove(zeros[len(zeros)-1])
+	for i in zeros:
+		if i =='':
+			zeros.remove('')
+	if len(zeros) ==0:
+		return 0
+	zeros.sort()
+	return(len(zeros[len(zeros)-1]))

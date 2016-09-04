@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+   "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true" />
+
+    <package name="board" namespace="/board" extends="default">
+    <!-- namespace는 가상경로 경로가 꼬일 수 있으니 경로 설정을 잘 해야함. 실제 경로는 액션 사이에 있는 것. 가상경로는 url에 포함 -->
+	<!-- redirect는 주소표시줄에 어떻게 표현될까 예상해서 가상경로로 호출해야함. dispatcher는 실제경로 서버의 자기디렉토리 안에있는 경로로 호출해야 함 -->
+   <action name="" class="">
+     <result></result>
+   </action>
+   
+   
+    </package>
+
+</struts>

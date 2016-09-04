@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+   "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+
+	<package name="account" namespace="/account" extends="default">
+		<!-- namespace는 가상경로 경로가 꼬일 수 있으니 경로 설정을 잘 해야함. 실제 경로는 액션 사이에 있는 것. 가상경로는 
+			url에 포함 -->
+		<!-- redirect는 주소표시줄에 어떻게 표현될까 예상해서 가상경로로 호출해야함. dispatcher는 실제경로 서버의 자기디렉토리 
+			안에있는 경로로 호출해야 함 -->
+			
+	<!-- 신규계좌 계설 -->
+		<action name="add1">
+		<interceptor-ref name="loginStack"/>
+			<result>/account/add1.jsp</result>
+		</action>
+		<action name="add2">
+		<interceptor-ref name="loginStack"/>
+			<result>/account/add2.jsp</result>
+		</action>
+		<action name="add3">
+		<interceptor-ref name="loginStack"/>
+			<result>/account/add3.jsp</result>
+		</action>
+		<action name="add1Action" class="action.AccountAction" method="openAccount">
+			<result name="success">/customer/haveaccount.jsp</result>
+		</action>
+		
+		<!-- 거래-->
+		<action name="deposit" class="action.AccountAction" method="depositForm">
+			<result name="success">/transaction/deposit.jsp</result>
+		</action>
+		<action name="depositAction" class="action.AccountAction"
+			method="deposit">
+			<result>/customer/haveaccount.jsp</result>
+		</action>
+
+		<action name="withdrawFormTest" class="action.AccountAction"
+			method="withdrawFormTest">
+			<result name="success">/transaction/withdraw.jsp</result>
+		</action>
+		<action name="withdrawAction" class="action.AccountAction"
+			method="withdraw">
+			<result>/customer/haveaccount.jsp</result>
+		</action>
+		
+		<action name="transferForm" class="action.AccountAction"
+			method="transferFrom">
+			<result>/transaction/transfer.jsp</result>
+		</action>
+		<action name="transfer_pop" class="action.AccountAction"
+			method="myAccountList">
+			<result>/transaction/transfer_pop1.jsp</result>
+		</action>
+		<action name="transfer_pop1">
+			<result name="success">/transaction/transfer_pop.jsp</result>
+		</action>
+		<action name="transfer_pop1Action" class="action.AccountAction"
+			method="transfer_pop1Action">
+			<result name="success">/transaction/transfer.jsp</result>
+		</action>
+		<action name="transfer_pop2Action" class="action.AccountAction"
+			method="transfer_pop2Action">
+			<result name="success">/transaction/transfer_pop.jsp</result>
+		</action>
+		<action name="transfer_pop2Submit.action" class="action.AccountAction"
+			method="pop2Submit">
+			<result name="success">/transaction/transfer.jsp</result>
+		</action>
+		<action name="transferAction" class="action.AccountAction"
+			method="transferAction">
+			<result name="success">/customer/haveaccount.jsp</result>
+		</action>
+		
+		<!-- 거래내역 조회 -->
+		<action name="tradelist" class="action.AccountAction" method="tradelist">
+			<result>/customer/tradelist.jsp</result>
+		</action>
+		<action name="tradelistSearch" class="action.AccountAction"
+			method="showTradelist">
+			<result name="success">/customer/tradelist.jsp</result>
+		</action>
+
+		<action name="secondPagelist" class="action.AccountAction"
+			method="secondPagelist">
+			<result name="success">/customer/tradelist.jsp</result>
+		</action>
+		
+		<!-- 대출 -->
+		<action name="loanForm" class="action.AccountAction" method="loanForm">
+			<result name="success">/loan/loan.jsp</result>
+		</action>
+
+		<action name="loan_pop" class="action.AccountAction" method="loan_pop">
+			<result> /loan/loan_pop.jsp</result>
+		</action>
+
+		<action name="loan_popAction">
+			<result>/loan/loan.jsp</result>
+		</action>
+
+		<action name="loanAction" class="action.AccountAction" method="loanAction">
+			<result>/loan/loan.jsp</result>
+		</action>
+
+		<!-- 관리자 -->
+		<action name="adm_answerlist" class="action.BoardAction" method="boardlist">
+		<result>/adm/answerlist.jsp</result>
+		</action>
+		<!-- 대출허가 --> 
+		<action name="loan_allow" class="action.AccountAction" method="loan_allow">
+		<result>/adm/loan.jsp</result>
+		</action>
+		
+		<!-- 대출거절 -->
+		<action name="loan_decline" class="action.AccountAction" method="loan_decline">
+		<result>/adm/loan.jsp</result>
+		</action>
+	</package>
+
+</struts>
